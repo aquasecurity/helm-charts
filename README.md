@@ -2,7 +2,7 @@
 
 [![License][license-img]][license]
 
-[license-img]: https://img.shields.io/github/license/aquasecurity/helm-charts.svg
+[license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [license]: https://github.com/aquasecurity/helm-charts/blob/master/LICENSE
 
 ![Aquasecurity logo](https://avatars3.githubusercontent.com/u/12783832?s=200&v=4)
