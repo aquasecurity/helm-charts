@@ -6,11 +6,13 @@
 [license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [license]: https://github.com/aquasecurity/helm-charts/blob/master/LICENSE
 
-
-## Introduction
-
-Aqua Security helm charts on a [Kubernetes](https://kubernetes.io) cluster using the
+Aqua Security Open Source Projects Helm Charts on a [Kubernetes](https://kubernetes.io) cluster using the
 [Helm](https://helm.sh) package manager.
+
+## Charts
+
+- [Starboard](https://github.com/aquasecurity/starboard/tree/main/deploy/helm)
+- [Trivy](https://github.com/aquasecurity/trivy/tree/main/helm/trivy)
 
 ## Prerequisites
 
@@ -24,7 +26,7 @@ curl -L https://git.io/get_helm.sh | bash
 helm init
 ```
 
-## Installing the Aqua Helm repository
+## Installing Aqua Community Helm Repository
 
 ```
 helm repo add aquasecurity https://aquasecurity.github.io/helm-charts/
