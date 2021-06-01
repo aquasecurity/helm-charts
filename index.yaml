@@ -99,6 +99,21 @@ entries:
     version: 0.4.1
   trivy:
   - apiVersion: v2
+    appVersion: 0.18.3
+    created: "2021-06-01T05:30:06.097872847Z"
+    description: Trivy helm chart
+    digest: c002e432ef4d74b8907d41bad717cbaa867bc9cd6a85df31fec4979144ed36e8
+    keywords:
+    - scanner
+    - trivy
+    - vulnerability
+    name: trivy
+    sources:
+    - https://github.com/aquasecurity/trivy
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/trivy-0.4.3/trivy-0.4.3.tgz
+    version: 0.4.3
+  - apiVersion: v2
     appVersion: 0.15.0
     created: "2021-03-14T02:02:38.542283622Z"
     description: Trivy helm chart
