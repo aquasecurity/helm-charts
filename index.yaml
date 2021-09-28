@@ -1,5 +1,21 @@
 apiVersion: v1
 entries:
+  harbor-scanner-aqua:
+  - apiVersion: v1
+    appVersion: 0.12.0
+    created: "2021-09-28T06:35:13.963820594Z"
+    description: Harbor scanner adapter for Aqua Enterprise scanner
+    digest: e052a964f1ed2229b59cfcdc31b00849bad6c1d6aead71b81b76f640a090f5fd
+    keywords:
+    - scanner
+    - harbor
+    - vulnerability
+    name: harbor-scanner-aqua
+    sources:
+    - https://github.com/aquasecurity/harbor-scanner-aqua
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/harbor-scanner-aqua-0.12.0/harbor-scanner-aqua-0.12.0.tgz
+    version: 0.12.0
   postee:
   - apiVersion: v2
     appVersion: v2.0.4
