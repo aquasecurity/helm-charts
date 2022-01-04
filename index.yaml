@@ -33,6 +33,21 @@ entries:
     version: 0.12.0
   harbor-scanner-trivy:
   - apiVersion: v1
+    appVersion: 0.24.0
+    created: "2022-01-04T15:54:10.728786946Z"
+    description: Harbor scanner adapter for Trivy
+    digest: 6f94fcc86456d8400f79382acbc26d85fa1cacb5944be094d42c7da41f125442
+    keywords:
+    - scanner
+    - harbor
+    - vulnerability
+    name: harbor-scanner-trivy
+    sources:
+    - https://github.com/aquasecurity/harbor-scanner-trivy
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/harbor-scanner-trivy-0.24.0/harbor-scanner-trivy-0.24.0.tgz
+    version: 0.24.0
+  - apiVersion: v1
     appVersion: 0.23.0
     created: "2021-10-13T06:30:21.207778648Z"
     description: Harbor scanner adapter for Trivy
@@ -466,4 +481,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-0.4.2/trivy-0.4.2.tgz
     version: 0.4.2
-generated: "2021-12-17T18:11:07.325068446Z"
+generated: "2022-01-04T15:54:10.729390055Z"
