@@ -11,6 +11,7 @@ Aqua Security Open Source Projects Helm Charts on a [Kubernetes](https://kuberne
 
 ## Charts
 
+- [Trivy Operator](https://github.com/aquasecurity/trivy-operator/tree/main/deploy/helm)
 - [Starboard](https://github.com/aquasecurity/starboard/tree/main/deploy/helm)
 - [Trivy](https://github.com/aquasecurity/trivy/tree/main/helm/trivy)
 
