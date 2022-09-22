@@ -1124,6 +1124,22 @@ entries:
     version: 0.4.2
   trivy-operator:
   - apiVersion: v2
+    appVersion: 0.3.0-rc
+    created: "2022-09-22T12:24:56.879918323Z"
+    description: Keeps security report resources updated
+    digest: fb2777ae23ab287639f907c92b700007a74e9a067c212efa9ff7742c6181393a
+    keywords:
+    - aquasecurity
+    - trivyoperator
+    - trivy
+    name: trivy-operator
+    sources:
+    - https://github.com/aquasecurity/trivy-operator
+    type: application
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.3.0-rc/trivy-operator-0.3.0-rc.tgz
+    version: 0.3.0-rc
+  - apiVersion: v2
     appVersion: 0.2.1
     created: "2022-09-18T14:00:03.006558346Z"
     description: Keeps security report resources updated
@@ -1523,4 +1539,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.0.3/trivy-operator-0.0.3.tgz
     version: 0.0.3
-generated: "2022-09-18T14:00:03.00719845Z"
+generated: "2022-09-22T12:24:56.881094924Z"
