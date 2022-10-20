@@ -927,6 +927,25 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/starboard-operator-0.4.1/starboard-operator-0.4.1.tgz
     version: 0.4.1
+  tracee:
+  - apiVersion: v2
+    appVersion: 0.8.3
+    created: "2022-10-20T18:11:53.096698652Z"
+    dependencies:
+    - condition: postee.enabled
+      name: postee
+      repository: '@aqua-charts'
+      version: ~2.8.2
+    description: Linux Runtime Security and Forensics using eBPF
+    digest: ded86ffb6e142d41399dba7ac1b3202e721a9bc185cdaab5bea5283ea2ec8ccb
+    home: https://aquasecurity.github.io/tracee/v0.8.3/
+    name: tracee
+    sources:
+    - https://github.com/aquasecurity/tracee
+    type: application
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/tracee-0.8.3/tracee-0.8.3.tgz
+    version: 0.8.3
   trivy:
   - apiVersion: v2
     appVersion: 0.30.4
@@ -1665,4 +1684,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.0.3/trivy-operator-0.0.3.tgz
     version: 0.0.3
-generated: "2022-10-20T13:00:14.813668016Z"
+generated: "2022-10-20T18:11:53.097297161Z"
