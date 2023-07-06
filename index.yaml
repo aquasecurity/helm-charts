@@ -274,6 +274,21 @@ entries:
     version: 0.22.0
   postee:
   - apiVersion: v2
+    appVersion: v2.12.0
+    created: "2023-07-06T07:58:01.330984449Z"
+    description: A Helm chart for Postee
+    digest: ac31092e692827d1a96497da901a2b54cef641540f5409c68370852e3473832d
+    keywords:
+    - aquasecurity
+    - postee
+    name: postee
+    sources:
+    - https://github.com/aquasecurity/postee
+    type: application
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/postee-v2.12.0/postee-v2.12.0.tgz
+    version: v2.12.0
+  - apiVersion: v2
     appVersion: v2.11.2
     created: "2023-06-06T17:35:41.488452256Z"
     description: A Helm chart for Postee
@@ -2851,4 +2866,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.0.3/trivy-operator-0.0.3.tgz
     version: 0.0.3
-generated: "2023-07-02T17:01:20.047702987Z"
+generated: "2023-07-06T07:58:01.332308552Z"
