@@ -15,6 +15,7 @@ Aqua Security Open Source Projects Helm Charts on a [Kubernetes](https://kuberne
 - [Starboard](https://github.com/aquasecurity/starboard/tree/main/deploy/helm)
 - [Trivy](https://github.com/aquasecurity/trivy/tree/main/helm/trivy)
 - [Postee](https://github.com/aquasecurity/postee/tree/main/deploy/helm/postee)
+- [harbor-scanner-trivy](https://github.com/aquasecurity/harbor-scanner-trivy/tree/main/helm/harbor-scanner-trivy)
 
 ## Prerequisites
 
