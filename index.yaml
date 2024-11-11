@@ -1308,6 +1308,19 @@ entries:
     version: 0.4.1
   tracee:
   - apiVersion: v2
+    appVersion: 0.22.4
+    created: "2024-11-11T18:30:56.285806266Z"
+    description: Linux Runtime Security and Forensics using eBPF
+    digest: 6007cab7a4e06ecac557397c2d31134e43102c8efe82c2c05895ecbdb9a70089
+    home: https://aquasecurity.github.io/tracee/v0.22.4/
+    name: tracee
+    sources:
+    - https://github.com/aquasecurity/tracee
+    type: application
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/tracee-0.22.4/tracee-0.22.4.tgz
+    version: 0.22.4
+  - apiVersion: v2
     appVersion: 0.22.3
     created: "2024-10-31T22:05:24.069380366Z"
     description: Linux Runtime Security and Forensics using eBPF
@@ -3810,4 +3823,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.0.3/trivy-operator-0.0.3.tgz
     version: 0.0.3
-generated: "2024-10-31T22:05:24.071225278Z"
+generated: "2024-11-11T18:30:56.287796859Z"
