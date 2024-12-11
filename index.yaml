@@ -875,6 +875,22 @@ entries:
     version: v1.1.10
   starboard-operator:
   - apiVersion: v2
+    appVersion: 0.15.23
+    created: "2024-12-11T12:38:54.581171456Z"
+    description: Keeps security report resources updated
+    digest: 439d9ba81ff4f477c2533452f652bce12fe1233caedcbea4ae65f65a5e43667c
+    keywords:
+    - aquasecurity
+    - starboard
+    - trivy
+    name: starboard-operator
+    sources:
+    - https://github.com/aquasecurity/starboard
+    type: application
+    urls:
+    - https://github.com/aquasecurity/helm-charts/releases/download/starboard-operator-0.10.21/starboard-operator-0.10.21.tgz
+    version: 0.10.21
+  - apiVersion: v2
     appVersion: 0.15.19
     created: "2024-01-01T15:11:42.176194928Z"
     description: Keeps security report resources updated
@@ -3869,4 +3885,4 @@ entries:
     urls:
     - https://github.com/aquasecurity/helm-charts/releases/download/trivy-operator-0.0.3/trivy-operator-0.0.3.tgz
     version: 0.0.3
-generated: "2024-12-05T05:27:03.996390052Z"
+generated: "2024-12-11T12:38:54.582530596Z"
