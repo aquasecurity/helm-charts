@@ -1,0 +1,83 @@
+name: Publish Helm chart
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'aquasecurity/trivy ref to checkout (e.g. commit SHA)'
+        required: true
+        type: string
+      chart_dir:
+        description: 'Path to the Helm chart directory in aquasecurity/trivy'
+        required: false
+        type: string
+        default: helm/trivy
+
+# Explicitly disable all GITHUB_TOKEN permissions since we use a dedicated token for all write operations
+permissions: {}
+
+env:
+  HELM_REPO: helm-charts
+
+jobs:
+  publish-chart:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout trivy
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          repository: aquasecurity/trivy
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+          sparse-checkout: ${{ inputs.chart_dir }}
+
+      - name: Install chart-releaser
+        env:
+          CR_VERSION: "1.3.0"
+        run: |
+          curl -sSLO "https://github.com/helm/chart-releaser/releases/download/v${CR_VERSION}/chart-releaser_${CR_VERSION}_linux_amd64.tar.gz"
+          echo "baed2315a9bb799efb71d512c5198a2a3b8dcd139d7f22f878777cffcd649a37  chart-releaser_${CR_VERSION}_linux_amd64.tar.gz" | sha256sum -c -
+          tar xzf "chart-releaser_${CR_VERSION}_linux_amd64.tar.gz" cr
+          mv cr /usr/local/bin/cr
+          rm "chart-releaser_${CR_VERSION}_linux_amd64.tar.gz"
+
+      - name: Package helm chart
+        env:
+          CHART_DIR: ${{ inputs.chart_dir }}
+        run: |
+          cr package "$CHART_DIR"
+
+      - name: Upload helm chart
+        # Failed with upload the same version: https://github.com/helm/chart-releaser/issues/101
+        continue-on-error: true
+        run: |
+          # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
+          cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
+            --git-repo "${{ env.HELM_REPO }}" \
+            --token "${{ secrets.ORG_REPO_TOKEN }}" \
+            --package-path .cr-release-packages
+
+      - name: Index helm chart
+        run: |
+          cr index --owner "$GITHUB_REPOSITORY_OWNER" \
+            --git-repo "${{ env.HELM_REPO }}" \
+            -c "https://$GITHUB_REPOSITORY_OWNER.github.io/${{ env.HELM_REPO }}/" \
+            --index-path index.yaml
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: gh-pages
+          path: gh-pages
+          # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
+          token: ${{ secrets.ORG_REPO_TOKEN }}
+
+      - name: Push index file
+        run: |
+          cp index.yaml gh-pages/index.yaml
+          cd gh-pages
+          git config user.email aqua-bot@users.noreply.github.com
+          git config user.name aqua-bot
+          git add index.yaml
+          git commit -m "Update index.yaml"
+          git push
