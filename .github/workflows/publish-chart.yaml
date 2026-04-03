@@ -26,7 +26,7 @@ jobs:
       - name: Checkout trivy
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
-          repository: aquasecurity/trivy
+          repository: ${{ github.repository_owner }}/trivy
           ref: ${{ inputs.ref }}
           persist-credentials: false
           sparse-checkout: ${{ inputs.chart_dir }}
@@ -48,14 +48,27 @@ jobs:
           cr package "$CHART_DIR"
 
       - name: Upload helm chart
-        # Failed with upload the same version: https://github.com/helm/chart-releaser/issues/101
-        continue-on-error: true
         run: |
           # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
           cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
             --git-repo "${{ env.HELM_REPO }}" \
             --token "${{ secrets.ORG_REPO_TOKEN }}" \
-            --package-path .cr-release-packages
+            --package-path .cr-release-packages \
+            --skip-existing
+
+      - name: Wait for release to be available
+        env:
+          CHART_DIR: ${{ inputs.chart_dir }}
+        run: |
+          # cr index fails if the release is not yet available via GitHub API
+          # due to a race condition after cr upload creates the release
+          name=$(grep '^name:' "$CHART_DIR/Chart.yaml" | awk '{print $2}')
+          version=$(grep '^version:' "$CHART_DIR/Chart.yaml" | awk '{print $2}')
+          tag="${name}-${version}"
+          for i in {1..10}; do
+            curl -sfI -o /dev/null "https://api.github.com/repos/$GITHUB_REPOSITORY_OWNER/${{ env.HELM_REPO }}/releases/tags/${tag}" && break
+            sleep 2
+          done
 
       - name: Index helm chart
         run: |
