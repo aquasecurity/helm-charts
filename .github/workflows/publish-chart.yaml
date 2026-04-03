@@ -48,33 +48,50 @@ jobs:
           cr package "$CHART_DIR"
 
       - name: Upload helm chart
+        env:
+          HELM_REPO: ${{ env.HELM_REPO }}
+          CR_TOKEN: ${{ secrets.ORG_REPO_TOKEN }}
         run: |
           # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
           cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
-            --git-repo "${{ env.HELM_REPO }}" \
-            --token "${{ secrets.ORG_REPO_TOKEN }}" \
+            --git-repo "$HELM_REPO" \
+            --token "$CR_TOKEN" \
             --package-path .cr-release-packages \
             --skip-existing
 
-      - name: Wait for release to be available
+      - name: Get chart version
+        id: chart-version
         env:
           CHART_DIR: ${{ inputs.chart_dir }}
         run: |
-          # cr index fails if the release is not yet available via GitHub API
-          # due to a race condition after cr upload creates the release
           name=$(grep '^name:' "$CHART_DIR/Chart.yaml" | awk '{print $2}')
           version=$(grep '^version:' "$CHART_DIR/Chart.yaml" | awk '{print $2}')
-          tag="${name}-${version}"
-          for i in {1..10}; do
-            curl -sfI -o /dev/null "https://api.github.com/repos/$GITHUB_REPOSITORY_OWNER/${{ env.HELM_REPO }}/releases/tags/${tag}" && break
+          echo "tag=${name}-${version}" >> "$GITHUB_OUTPUT"
+
+      - name: Wait for release to be available
+        env:
+          CHART_TAG: ${{ steps.chart-version.outputs.tag }}
+          HELM_REPO: ${{ env.HELM_REPO }}
+        run: |
+          # cr index fails if the release is not yet available via GitHub API
+          # due to a race condition after cr upload creates the release
+          max_attempts=10
+          for i in $(seq 1 "$max_attempts"); do
+            curl -sfI -o /dev/null "https://api.github.com/repos/$GITHUB_REPOSITORY_OWNER/$HELM_REPO/releases/tags/$CHART_TAG" && break
+            if [[ $i -eq $max_attempts ]]; then
+              echo "Release $CHART_TAG not available after $max_attempts attempts" >&2
+              exit 1
+            fi
             sleep 2
           done
 
       - name: Index helm chart
+        env:
+          HELM_REPO: ${{ env.HELM_REPO }}
         run: |
           cr index --owner "$GITHUB_REPOSITORY_OWNER" \
-            --git-repo "${{ env.HELM_REPO }}" \
-            -c "https://$GITHUB_REPOSITORY_OWNER.github.io/${{ env.HELM_REPO }}/" \
+            --git-repo "$HELM_REPO" \
+            -c "https://$GITHUB_REPOSITORY_OWNER.github.io/$HELM_REPO/" \
             --index-path index.yaml
 
       - name: Checkout gh-pages
@@ -86,10 +103,14 @@ jobs:
           token: ${{ secrets.ORG_REPO_TOKEN }}
 
       - name: Push index file
+        env:
+          CHART_TAG: ${{ steps.chart-version.outputs.tag }}
         run: |
           cp index.yaml gh-pages/index.yaml
           cd gh-pages
           git config user.email aqua-bot@users.noreply.github.com
           git config user.name aqua-bot
           git add index.yaml
-          git diff --cached --quiet || git commit -m "Update index.yaml" && git push
+          if ! git diff --cached --quiet; then
+            git commit -m "Update index.yaml for ${CHART_TAG}" && git push
+          fi
