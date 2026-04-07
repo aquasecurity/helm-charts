@@ -50,9 +50,8 @@ jobs:
       - name: Upload helm chart
         env:
           HELM_REPO: ${{ env.HELM_REPO }}
-          GH_TOKEN: ${{ secrets.ORG_REPO_TOKEN }}
+          GH_TOKEN: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
         run: |
-          # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
           cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
             --git-repo "$HELM_REPO" \
             --token "$GH_TOKEN" \
@@ -96,17 +95,14 @@ jobs:
 
       - name: Checkout gh-pages
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
+        with: # zizmor: ignore[artipacked] -- token is required to push to gh-pages
           ref: gh-pages
           path: gh-pages
-          persist-credentials: false
+          token: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
 
       - name: Push index file
         env:
           CHART_TAG: ${{ steps.chart-version.outputs.tag }}
-          HELM_REPO: ${{ env.HELM_REPO }}
-          # TODO: rename ORG_REPO_TOKEN to a dedicated secret once it is released
-          GH_TOKEN: ${{ secrets.ORG_REPO_TOKEN }}
         run: |
           cp index.yaml gh-pages/index.yaml
           cd gh-pages
@@ -118,4 +114,4 @@ jobs:
             exit 1
           fi
           git commit -m "Update index.yaml for ${CHART_TAG}"
-          git push "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY_OWNER/$HELM_REPO.git"
+          git push
