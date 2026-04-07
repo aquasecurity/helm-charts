@@ -113,7 +113,9 @@ jobs:
           git config user.email aqua-bot@users.noreply.github.com
           git config user.name aqua-bot
           git add index.yaml
-          if ! git diff --cached --quiet; then
-            git commit -m "Update index.yaml for ${CHART_TAG}" && \
-              git push "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY_OWNER/$HELM_REPO.git"
+          if git diff --cached --quiet; then
+            echo "No changes to index.yaml — chart ${CHART_TAG} is already published" >&2
+            exit 1
           fi
+          git commit -m "Update index.yaml for ${CHART_TAG}"
+          git push "https://x-access-token:$GH_TOKEN@github.com/$GITHUB_REPOSITORY_OWNER/$HELM_REPO.git"
