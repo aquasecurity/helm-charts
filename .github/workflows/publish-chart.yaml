@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: 'aquasecurity/trivy ref to checkout (e.g. commit SHA)'
+        description: 'Ref to checkout from {owner}/trivy (e.g. commit SHA or tag)'
         required: true
         type: string
       chart_dir:
-        description: 'Path to the Helm chart directory in aquasecurity/trivy'
+        description: 'Path to the Helm chart directory in {owner}/trivy'
         required: false
         type: string
         default: helm/trivy
