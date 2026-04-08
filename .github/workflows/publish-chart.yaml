@@ -117,6 +117,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
           token: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
+          persist-credentials: true
 
       - name: Push index file
         if: steps.check-published.outputs.skip != 'true'
