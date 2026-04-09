@@ -13,10 +13,10 @@ on:
         type: string
       chart_dir:
         description: 'Path to the Helm chart directory in the repository'
-        required: false
+        required: true
         type: string
 
-# Explicitly disable all GITHUB_TOKEN permissions since we use a dedicated token for all write operations
+# Disable all GITHUB_TOKEN permissions by default; individual jobs override as needed
 permissions: {}
 
 env:
@@ -58,7 +58,7 @@ jobs:
     permissions:
       contents: read # required by github.token to read releases from public repositories via gh CLI
     steps:
-      - name: Checkout trivy
+      - name: Checkout repository with the Helm chart
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           repository: ${{ inputs.repository }}
@@ -84,7 +84,6 @@ jobs:
 
       - name: Upload helm chart
         env:
-          HELM_REPO: ${{ env.HELM_REPO }}
           GH_TOKEN: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
         run: |
           cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
@@ -96,7 +95,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           CHART_TAG: ${{ needs.check-published.outputs.tag }}
-          HELM_REPO: ${{ env.HELM_REPO }}
         run: |
           # cr index fails if the release is not yet available via GitHub API
           # due to a race condition after cr upload creates the release
@@ -111,8 +109,6 @@ jobs:
           done
 
       - name: Index helm chart
-        env:
-          HELM_REPO: ${{ env.HELM_REPO }}
         run: |
           cr index --owner "$GITHUB_REPOSITORY_OWNER" \
             --git-repo "$HELM_REPO" \
@@ -136,9 +132,5 @@ jobs:
           git config user.email aqua-bot@users.noreply.github.com
           git config user.name aqua-bot
           git add index.yaml
-          if git diff --cached --quiet; then
-            echo "No changes to index.yaml — chart ${CHART_TAG} is already published" >&2
-            exit 1
-          fi
           git commit -m "Update index.yaml for ${CHART_TAG}"
           git push
