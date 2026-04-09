@@ -82,31 +82,31 @@ jobs:
         run: |
           cr package "$CHART_DIR"
 
-      - name: Upload helm chart
-        env:
-          GH_TOKEN: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
-        run: |
-          cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
-            --git-repo "$HELM_REPO" \
-            --token "$GH_TOKEN" \
-            --package-path .cr-release-packages
+      # - name: Upload helm chart
+      #   env:
+      #     GH_TOKEN: ${{ secrets.HELM_CHARTS_DEPLOY_TOKEN }}
+      #   run: |
+      #     cr upload --owner "$GITHUB_REPOSITORY_OWNER" \
+      #       --git-repo "$HELM_REPO" \
+      #       --token "$GH_TOKEN" \
+      #       --package-path .cr-release-packages
 
-      - name: Wait for release to be available
-        env:
-          GH_TOKEN: ${{ github.token }}
-          CHART_TAG: ${{ needs.check-published.outputs.tag }}
-        run: |
-          # cr index fails if the release is not yet available via GitHub API
-          # due to a race condition after cr upload creates the release
-          max_attempts=10
-          for i in $(seq 1 "$max_attempts"); do
-            gh api "repos/$GITHUB_REPOSITORY_OWNER/$HELM_REPO/releases/tags/$CHART_TAG" > /dev/null && break
-            if [[ $i -eq $max_attempts ]]; then
-              echo "Release $CHART_TAG not available after $max_attempts attempts" >&2
-              exit 1
-            fi
-            sleep 2
-          done
+      # - name: Wait for release to be available
+      #   env:
+      #     GH_TOKEN: ${{ github.token }}
+      #     CHART_TAG: ${{ needs.check-published.outputs.tag }}
+      #   run: |
+      #     # cr index fails if the release is not yet available via GitHub API
+      #     # due to a race condition after cr upload creates the release
+      #     max_attempts=10
+      #     for i in $(seq 1 "$max_attempts"); do
+      #       gh api "repos/$GITHUB_REPOSITORY_OWNER/$HELM_REPO/releases/tags/$CHART_TAG" > /dev/null && break
+      #       if [[ $i -eq $max_attempts ]]; then
+      #         echo "Release $CHART_TAG not available after $max_attempts attempts" >&2
+      #         exit 1
+      #       fi
+      #       sleep 2
+      #     done
 
       - name: Index helm chart
         run: |
@@ -133,4 +133,4 @@ jobs:
           git config user.name aqua-bot
           git add index.yaml
           git commit -m "Update index.yaml for ${CHART_TAG}"
-          git push
+          # git push
