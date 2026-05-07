@@ -139,6 +139,7 @@ jobs:
           git commit -m "Update index.yaml for ${CHART_TAG}"
           git push origin "${BRANCH}"
           REVIEWER_FLAG=""
+          # skip reviewer on forks to allow testing
           if [[ "$GITHUB_REPOSITORY_OWNER" == "aquasecurity" ]]; then
             REVIEWER_FLAG="--reviewer aquasecurity/trivy"
           fi
