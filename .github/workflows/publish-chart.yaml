@@ -131,7 +131,7 @@ jobs:
           cp index.yaml gh-pages/index.yaml
           cd gh-pages
           git config user.name "GitHub Actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.email "actions@github.com"
           BRANCH="update-index-${CHART_TAG}"
           git checkout -b "${BRANCH}"
           git add index.yaml
